@@ -64,7 +64,6 @@ while 1:
         cv2.imwrite(filename, img)
         upload = cloudinary.uploader.upload(filename)
         sendSMS(upload['url'])
-        break
 
     # Display image in a window (when testing)
     # cv2.imshow('img', img) 
