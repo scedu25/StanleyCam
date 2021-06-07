@@ -3,8 +3,8 @@ import cv2
 import cloudinary
 import cloudinary.uploader
 import vonage
-from soundplayer import SoundPlayer
 import time
+from pygame import mixer
 
 # Config for uploading photos to Cloudinary
 cloudinary.config(
@@ -39,7 +39,6 @@ face_cascade = cv2.CascadeClassifier('haarcascade_frontalcatface.xml')
 cap = cv2.VideoCapture(0) 
 
 i = 0
-
 while 1: 
   
     # Read frames from camera
@@ -60,11 +59,25 @@ while 1:
             roi_gray = gray[y:y+h, x:x+w]
             roi_color = img[y:y+h, x:x+w]
         filename = 'image_' + str(i) + '.jpg'
+        # Initialize the pygame mixer and play audio file
+        mixer.init()
+        sound = mixer.Sound('vacuum.wav')
+        sound.play()
+
         # Write image out to a jpg file
         cv2.imwrite(filename, img)
+
+        # Upload image to cloudinary
         upload = cloudinary.uploader.upload(filename)
+
+        # Send SMS text with cloudinary URL
         sendSMS(upload['url'])
-        break
+
+        # Wait 10 seconds then uninitialize the mixer
+        time.sleep(10)
+        sound.stop()
+        mixer.quit()
+
 
     # Display image in a window (when testing)
     # cv2.imshow('img', img) 
