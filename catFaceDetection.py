@@ -78,7 +78,6 @@ while 1:
         sound.stop()
         mixer.quit()
 
-
     # Display image in a window (when testing)
     # cv2.imshow('img', img) 
   
